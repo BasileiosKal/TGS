@@ -26,6 +26,7 @@ print("tensorflow version: ", tf.__version__)
 data_dir = "./competition_data"
 
 nrows = 100
+
 if isinstance(nrows, int) and nrows>0:
     train_df = pd.read_csv(data_dir+"/train.csv", index_col="id", usecols=[0], nrows=nrows)
     depths_df = pd.read_csv(data_dir+"/depths.csv", index_col="id")
@@ -38,19 +39,14 @@ elif isinstance(nrows, str) and nrows.upper() == "ALL":
     test_df = depths_df[~depths_df.index.isin(train_df.index)]
 else:
     raise ValueError("Invalid nrows value")
-
-#train_df["images"] = [img_to_array(load_img(data_dir+"/train/images/{}.png".format(idx),
-#                                        color_mode = "grayscale"), dtype="float32")/255 for idx in (train_df.index)]
-
-#train_df["masks"] = [img_to_array(load_img(data_dir+"/train/masks/{}.png".format(idx),
-#                                       color_mode = "grayscale"), dtype="float32")/65535 for idx in (train_df.index)]
+    
 
 print("Loading images...")
 train_df["images"] = [np.array(load_img(data_dir+"/train/images/{}.png".format(idx),
                                         color_mode = "grayscale"))/255 for idx in (train_df.index)]
 print("Loading masks...")
 train_df["masks"] = [np.array(load_img(data_dir+"/train/masks/{}.png".format(idx),
-                                       color_mode = "grayscale"))/65535 for idx in (train_df.index)]
+                                       color_mode = "grayscale"))/255 for idx in (train_df.index)] # 65535
 
 print("done loading images")
 
