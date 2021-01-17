@@ -52,8 +52,8 @@ def clean_up(model):
 # ------------------------------------------------------------------------------- #
 #                              Important Variables                                #
 # ------------------------------------------------------------------------------- #
-data_dir = "C:/Users/gauss/Documents/DL_data/competition_data"
-validation_data_dir = "C:/Users/gauss/Documents/DL_data/competition_data"
+data_dir = "C:/Users/G/T/X/S"
+validation_data_dir = "C:/Users/G/T/X/S"
 nrows = "all"                 # Set to 'all' to load the whole set
 load_validation = True      # Only load the validation images and masks??
 split_train_test = False    # Split data to train and test sets??
