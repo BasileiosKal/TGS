@@ -24,13 +24,14 @@ from keras import optimizers
 # ------------------------------------------------------------------------------- #
 #                               Callbacks                                         #
 # ------------------------------------------------------------------------------- #
-from keras.callbacks import ModelCheckpoint,  CSVLogger, EarlyStopping
-savePath="C:/Users/Tominho/Desktop/DL/saved-{epoch:02d}-{my_iou_metric:.2f}.hdf5"
-checkPoint = ModelCheckpoint(savePath, monitor='my_iou_metric', verbose=1, save_best_only= False, mode='max')
-early_stop = EarlyStopping(monitor='my_iou_metric', patience=5, verbose=1)
+from keras.callbacks import ModelCheckpoint,  CSVLogger, EarlyStopping, ReduceLROnPlateau
+savePath="C:/Users/Tominho/Desktop/PyCharm_project/saved-{epoch:02d}-{my_iou_metric:.2f}.hdf5"
+checkPoint = ModelCheckpoint(savePath, monitor='my_iou_metric', verbose=1, save_best_only= True, mode='max')
+early_stop = EarlyStopping(monitor='my_iou_metric', patience=7, verbose=1)
+reduce_lr_OnPlateau = ReduceLROnPlateau(factor=0.1, patience=5, min_lr=0.0001, verbose=1)
 #CSVLogger logs epoch, acc, loss, val_acc, val_loss
 log_csv = CSVLogger('my_logs.csv', separator=',', append=False)
-callbacks_list = [checkPoint, early_stop, log_csv]
+callbacks_list = [checkPoint, early_stop, log_csv, reduce_lr_OnPlateau]
 # ------------------------------------------------------------------------------- #
 
 
@@ -356,17 +357,17 @@ def BatchActivate(x,lambda2):
 def convolution_block(x, filters, size, strides=(1, 1), padding='same', activation=True):
     x = Conv2D(filters, size, strides=strides, padding=padding)(x)
     if activation == True:
-        x = BatchActivate(x)
+        x = BatchActivate(x, False )
     return x
 
 
 def residual_block(blockInput, num_filters=16, batch_activate=False):
-    x = BatchActivate(blockInput)
+    x = BatchActivate(blockInput, False )
     x = convolution_block(x, num_filters, (3, 3))
     x = convolution_block(x, num_filters, (3, 3), activation=False)
     x = Add()([x, blockInput])
     if batch_activate:
-        x = BatchActivate(x)
+        x = BatchActivate(x, False )
     return x
 
 
@@ -577,7 +578,7 @@ uconv0_add_1_BA = BatchActivate(uconv0_add_1, True)
 uconv0_2 = block(uconv0_add_1_BA, 16, 8)
 uconv0_add_2 = Add()([uconv0_2, uconv0_add_1])
 
-uconv0_add_2 = BatchActivate(uconv0_add_2)
+uconv0_add_2 = BatchActivate(uconv0_add_2, False)
 
 # uconv0 = residual_block(uconv0,filters_5)
 # uconv0 = residual_block(uconv0,filters_5, True)
