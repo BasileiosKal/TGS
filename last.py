@@ -167,18 +167,6 @@ plot_image_example()
 # In[ ]:
 
 
-def global_contrast_normalization(filename, s, lmda, epsilon):
-    X_average = numpy.mean(X)
-    # print('Mean: ', X_average)
-    X = X - X_average
-
-    # `su` is here the mean, instead of the sum
-    contrast = numpy.sqrt(lmda + numpy.mean(X**2))
-
-    X = s * X / max(contrast, epsilon)
-    
-    return X
-
 
 # #### Resizeing the images
 
@@ -773,8 +761,8 @@ best_model = keras.models.load_model("C:/Users/gauss/Documents/TGS/Notebooks/Tes
 # In[ ]:
 
 
-del model
-gc.collect()
+#del model
+#gc.collect()
 
 
 # In[ ]:
@@ -791,16 +779,16 @@ print("COMPILE")
 # In[ ]:
 
 
-epochs = 40
-batch_len = 8
-history2 = best_model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=epochs, shuffle=True, batch_size=batch_len, callbacks = callbacks_list)
+#epochs = 40
+#batch_len = 8
+#history2 = best_model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=epochs, shuffle=True, batch_size=batch_len, callbacks = callbacks_list)
 
 
 # In[ ]:
 
 
-del best_model
-gc.collect()
+#del best_model
+#gc.collect()
 
 
 # In[ ]:
